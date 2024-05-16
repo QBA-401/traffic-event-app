@@ -8,7 +8,7 @@ const Queue = require('./Queue.js')
 
 const ordersQueue = new Queue();
 
-function handlePackageAvailable(payload){
+function handleAlertAvailable(payload){
   console.log('----------------------');
   ordersQueue.enqueue(payload);
   logEvent('pickup', payload);
@@ -35,11 +35,11 @@ function handleDelivered(payload){
 
 function logEvent(eventType, payload){
   const event = { 
-    event: eventType,
+
     time: getDate(),
     payload: payload
   }
   console.log('HUB SAYS: ', event);
 }
 
-module.exports = {handleDriverReady, handlePackageAvailable, handleInTransit, handleDelivered};
+module.exports = {handleDriverReady, handleAlertAvailable, handleInTransit, handleDelivered};
