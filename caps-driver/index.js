@@ -8,7 +8,7 @@ const URL = process.env.URL;
 
 const hubConnection = io.connect(URL);
 
-hubConnection.on('alert-available', handlePackageReadyForPickup);
+hubConnection.on('alert-available', handleAlertAvailable);
 
 function driverReady(){
   hubConnection.emit('driver-ready-for-alerts')
@@ -16,7 +16,7 @@ function driverReady(){
 
 setInterval(driverReady, 5000);
 
-function handlePackageReadyForPickup(payload){
+function handleAlertAvailable(payload){
   console.log('----------------------');
   console.log(`DRIVER RECEIVED: ${payload.alertMessage}`)
   // hubConnection.emit('in-transit', payload);

@@ -3,11 +3,9 @@
 const Chance = require('chance');
 
 class Alert {
-  constructor(channelURL, alertSystem, alertInterval) {
-    this.alertInterval = alertInterval;
+  constructor(channelURL) {
     this.io = require('socket.io-client');
     this.channelURL = channelURL;
-    this.alertSystem = alertSystem;
     this.chance = new Chance();
     this.hubConnection = this.io.connect(channelURL);
     this.startAlerts();

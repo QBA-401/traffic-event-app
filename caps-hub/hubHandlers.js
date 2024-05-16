@@ -23,11 +23,11 @@ function handleDriverReady(){
   return ordersQueue.peek();
 }
 
-function handleInTransit(payload){
-  logEvent('in-transit', payload);
-}
+// function handleInTransit(payload){
+//   logEvent('in-transit', payload);
+// }
 
-function handleDelivered(payload){
+function handleReceived(payload){
   logEvent('delivered', payload);
   ordersQueue.dequeue();
   console.log('Orders in Queue', ordersQueue.length());
@@ -42,4 +42,4 @@ function logEvent(eventType, payload){
   console.log('HUB SAYS: ', event);
 }
 
-module.exports = {handleDriverReady, handleAlertAvailable, handleInTransit, handleDelivered};
+module.exports = {handleDriverReady, handleAlertAvailable, handleReceived};

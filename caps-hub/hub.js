@@ -10,7 +10,7 @@ let queuesObject = {};
 
 const io = require('socket.io')(port);
 
-const { handleDriverReady, handleAlertAvailable, handleInTransit, handleDelivered } = require('./hubHandlers.js');
+const { handleDriverReady, handleAlertAvailable, handleReceived } = require('./hubHandlers.js');
 
 console.log(`Server is running on port ${port}`);
 
@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
   // socket.on('in-transit', handleInTransit);
 
   socket.on('received', (payload) => {
-    handleDelivered(payload);
+    handleReceived(payload);
     if (!queuesObject[payload.alert]) {
       queuesObject[payload.alert] = new Queue();
     }

@@ -1,7 +1,7 @@
-'use strict';
+// 'use strict';
 
-function handlePackageDelivered(payload, alertSystem){
-  console.log('----------------------');
-}
+// function handlePackageDelivered(payload, alertSystem){
+//   console.log('----------------------');
+// }
 
-module.exports = handlePackageDelivered;
+// module.exports = handlePackageDelivered;
