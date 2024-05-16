@@ -1,5 +1,5 @@
 'use strict';
-
+const colors = require('colors');
 const Chance = require('chance');
 
 class Alert {
@@ -74,7 +74,7 @@ generateWeatherReport() {
         alertMessage: randomTrafficAlert
       }
 
-      console.log(randomTrafficAlert);
+      console.log(colors.red(randomTrafficAlert));
 
       this.hubConnection.emit('alert-available', alertInfo);
     }, 3000);
