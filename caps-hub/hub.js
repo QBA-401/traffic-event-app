@@ -33,25 +33,25 @@ io.on('connection', (socket) => {
 
   socket.on('delivered', (payload) => {
     handleDelivered(payload);
-    if (!queuesObject[payload.store]) {
-      queuesObject[payload.store] = new Queue();
+    if (!queuesObject[payload.alert]) {
+      queuesObject[payload.alert] = new Queue();
     }
-    queuesObject[payload.store].enqueue(payload);
+    queuesObject[payload.alert].enqueue(payload);
   });
 
-  socket.on('get-delivery-info', (storeName) => {
-    if (!queuesObject[storeName]) {
-      queuesObject[storeName] = new Queue();
+  socket.on('get-delivery-info', (alertSystem) => {
+    if (!queuesObject[alertSystem]) {
+      queuesObject[alertSystem] = new Queue();
     }
-    while (!queuesObject[storeName].isEmpty()) {
-      const payload = queuesObject[storeName].dequeue();
+    while (!queuesObject[alertSystem].isEmpty()) {
+      const payload = queuesObject[alertSystem].dequeue();
       socket.emit('package-delivered', payload);
     }
   });
 
-  socket.on('received', (storeName) => {
-    if (queuesObject[storeName] && !queuesObject[storeName].isEmpty()) {
-      queuesObject[storeName].dequeue();
+  socket.on('received', (alertSystem) => {
+    if (queuesObject[alertSystem] && !queuesObject[alertSystem].isEmpty()) {
+      queuesObject[alertSystem].dequeue();
     }
   });
 
