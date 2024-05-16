@@ -3,27 +3,27 @@
 const Chance = require('chance');
 const handlePackageDelivered = require('./handler.js');
 
-class Vendor {
-  constructor(channelURL, storeName, orderInterval) {
+class Alert {
+  constructor(channelURL, alertSystem, orderInterval) {
     this.orderInterval = orderInterval;
     this.io = require('socket.io-client');
     this.channelURL = channelURL;
-    this.storeName = storeName;
+    this.alertSystem = alertSystem;
     this.chance = new Chance();
     this.hubConnection = this.io.connect(channelURL);
-    this.startSendingPackages();
+    this.startSendingWeatherAlerts();
   }
 
-  startSendingPackages() {
+  startSendingWeatherAlerts() {
     setInterval(() => {
-      const storeName = this.storeName;
+      const alertSystem = this.alertSystem;
       const randomName = this.chance.name();
       const randomAddress = this.chance.address();
       const randomOrderId = this.chance.string({ length: 10, alpha: true, numeric: true });
       
-      this.hubConnection.emit('get-delivery-info', storeName);
+      this.hubConnection.emit('get-delivery-info', alertSystem);
       const packageInfo = {
-        store: storeName,
+        alert: alertSystem,
         orderId: randomOrderId,
         customer: randomName,
         address: randomAddress
@@ -34,10 +34,10 @@ class Vendor {
     }, this.orderInterval);
 
     this.hubConnection.on('package-delivered', (payload) => {
-      handlePackageDelivered(payload, this.storeName);
+      handlePackageDelivered(payload, this.alertSystem);
       this.hubConnection.emit('received');
     });
   }
 }
 
-module.exports = Vendor;
+module.exports = Alert;
