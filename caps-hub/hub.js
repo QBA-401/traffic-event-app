@@ -10,7 +10,7 @@ let queuesObject = {};
 
 const io = require('socket.io')(port);
 
-const { handleDriverReady, handlePackageAvailable, handleInTransit, handleDelivered } = require('./hubHandlers.js');
+const { handleDriverReady, handleAlertAvailable, handleReceived } = require('./hubHandlers.js');
 
 console.log(`Server is running on port ${port}`);
 
@@ -18,36 +18,36 @@ io.on('connection', (socket) => {
   console.log('Connected', socket.id);
 
   // event listeners
-  socket.on('package-available', (payload) => {
-    handlePackageAvailable(payload);
+  socket.on('alert-available', (payload) => {
+    handleAlertAvailable(payload);
   });
 
-  socket.on('driver-ready', () => {
+  socket.on('driver-ready-for-alerts', () => {
     let nextOrder = handleDriverReady();
     if (nextOrder) {
-      socket.emit('package-ready-for-pickup', nextOrder);
+      socket.emit('alert-available', nextOrder);
     }
   });
 
-  socket.on('in-transit', handleInTransit);
+  // socket.on('in-transit', handleInTransit);
 
-  socket.on('delivered', (payload) => {
-    handleDelivered(payload);
+  socket.on('received', (payload) => {
+    handleReceived(payload);
     if (!queuesObject[payload.alert]) {
       queuesObject[payload.alert] = new Queue();
     }
     queuesObject[payload.alert].enqueue(payload);
   });
 
-  socket.on('get-delivery-info', (alertSystem) => {
-    if (!queuesObject[alertSystem]) {
-      queuesObject[alertSystem] = new Queue();
-    }
-    while (!queuesObject[alertSystem].isEmpty()) {
-      const payload = queuesObject[alertSystem].dequeue();
-      socket.emit('package-delivered', payload);
-    }
-  });
+  // socket.on('get-alert-info', (alertSystem) => {
+  //   if (!queuesObject[alertSystem]) {
+  //     queuesObject[alertSystem] = new Queue();
+  //   }
+  //   while (!queuesObject[alertSystem].isEmpty()) {
+  //     const payload = queuesObject[alertSystem].dequeue();
+  //     socket.emit('package-delivered', payload);
+  //   }
+  // });
 
   socket.on('received', (alertSystem) => {
     if (queuesObject[alertSystem] && !queuesObject[alertSystem].isEmpty()) {
