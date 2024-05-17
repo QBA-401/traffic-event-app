@@ -1,5 +1,5 @@
 'use strict';
-const getWeather = require('../weather')
+const getWeather = require('./weather')
 const Chance = require('chance');
 let cityData = "Noginsk"
 
@@ -25,8 +25,10 @@ class Alert {
 
         // Random severity level
         const severityLevels = ['Low', 'Medium', 'High'];
-        const severity = severityLevels[Math.floor(Math.random() * severityLevels.length)];
-
+        const randomValue = Math.random();
+        const index = Math.floor(randomValue * severityLevels.length);
+        const severity = severityLevels[index];
+        
         const alertMessageColor = function Colorize(severity) {
             let res = "";
             const [orangeColor, greenColor,redColor,blueColor] = ["\x1b[33m","\x1b[32m","\x1b[31m","\e[34m"];
@@ -74,43 +76,30 @@ class Alert {
     startAlerts() {
         setInterval(() => {
             const alertSystem = this.alertSystem;
-            // const randomName = this.chance.name();
-            // const randomAddress = this.chance.address();
-            // const randomOrderId = this.chance.string({ length: 10, alpha: true, numeric: true });
             const randomTrafficAlert = this.generateTrafficAlert();
 
             this.hubConnection.emit('get-alert-info', alertSystem);
             const alertInfo = {
                 alert: 'Traffic',
-                // orderId: randomOrderId,
-                // customer: randomName,
-                // address: randomAddress,
                 alertMessage: randomTrafficAlert
             }
 
             console.log(randomTrafficAlert);
 
             this.hubConnection.emit('alert-available', alertInfo);
-        }, 3000);
+        }, 2000);
 
 
         setInterval(() => {
             const alertSystem = this.alertSystem;
 
             //REAL WEATHER:
-            // this.generateRealWeatherReport("Moscow") WATCHOUT for 429 too many needs diff timer
-            // const randomName = this.chance.name();
-            // const randomAddress = this.chance.address();
-            // const randomOrderId = this.chance.string({ length: 10, alpha: true, numeric: true });
             const randomWeatherAlert = this.generateWeatherReport();
 
             this.hubConnection.emit('get-alert-info', alertSystem);
 
             const alertInfo = {
                 alert: 'Weather',
-                // orderId: randomOrderId,
-                // customer: randomName,
-                // address: randomAddress,
                 alertMessage: randomWeatherAlert
             }
 

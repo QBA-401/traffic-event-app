@@ -2,6 +2,8 @@
 
 # Traffic Event Dispatch Service
 
+### Authors: Armen Agabekian, Brendan McMullen, and Qilin Xie
+
 ## Overview
 The Traffic Event Dispatch Service is a system designed to manage traffic events and dispatch alerts to drivers and third-party systems in real-time. It provides updates and notifications about various types of alerts, including weather, and traffic incidents.
 
@@ -44,4 +46,4 @@ The Traffic Event Dispatch Service is a system designed to manage traffic events
 A UML diagram can visually represent the components and interactions of the Traffic Event Dispatch Service. It includes classes, relationships, and annotations to convey the system's structure and functionality effectively.
 
 
-- UML diagram: ![alt text](image-1.png)
+- UML diagram: ![alt text](UML.png)
