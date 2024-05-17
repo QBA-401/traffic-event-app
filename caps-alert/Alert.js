@@ -1,5 +1,7 @@
 'use strict';
+const getWeather = require('../weather')
 const Chance = require('chance');
+let cityData = "Noginsk"
 
 class Alert {
     constructor(channelURL) {
@@ -12,8 +14,6 @@ class Alert {
         this.generateWeatherReport();
     }
 
-
-    // generated from chatgpt
     generateTrafficAlert() {
         // Randomly select type of traffic alert
         const alertTypes = ['Accident', 'Road construction', 'Heavy traffic', 'Vehicle breakdown', 'Lane closure', 'Traffic jam'];
@@ -29,9 +29,9 @@ class Alert {
 
         const alertMessageColor = function Colorize(severity) {
             let res = "";
-            const [orangeColor, greenColor,redColor] = ["\x1b[33m", "\x1b[32m","\x1b[31m$"];
+            const [orangeColor, greenColor,redColor,blueColor] = ["\x1b[33m","\x1b[32m","\x1b[31m","\e[34m"];
             if (severity === "High")
-                res = `${alertType} alert: ${location}. Severity: "${redColor}{severity}\x1b[0m".`;
+                res = `${alertType} alert: ${location}. Severity: "${redColor}${severity}\x1b[0m".`;
             else if (severity === "Medium")
                 res = `${alertType} alert: ${location}. Severity: "${orangeColor}${severity}\x1b[0m".`;
             else
@@ -44,7 +44,6 @@ class Alert {
         return alertMessage;
     }
 
-// generated from chatgpt
     generateWeatherReport() {
         // Randomly select weather conditions
         const conditions = ['sunny', 'cloudy', 'rainy', 'stormy', 'foggy', 'snowy'];
@@ -65,6 +64,11 @@ class Alert {
         // Generate the report
         const report = `Weather report: ${condition.charAt(0).toUpperCase() + condition.slice(1)}. Temperature: ${temperature}°C. Wind speed: ${windSpeed} km/h. Humidity: ${humidity}%. Chance of precipitation: ${precipitationChance}%.`;
         return report;
+    }
+
+
+    generateRealWeatherReport(cityData) {
+        getWeather(cityData);
     }
 
     startAlerts() {
@@ -91,14 +95,17 @@ class Alert {
 
 
         setInterval(() => {
-
             const alertSystem = this.alertSystem;
+
+            //REAL WEATHER:
+            // this.generateRealWeatherReport("Moscow") WATCHOUT for 429 too many needs diff timer
             // const randomName = this.chance.name();
             // const randomAddress = this.chance.address();
             // const randomOrderId = this.chance.string({ length: 10, alpha: true, numeric: true });
             const randomWeatherAlert = this.generateWeatherReport();
 
             this.hubConnection.emit('get-alert-info', alertSystem);
+
             const alertInfo = {
                 alert: 'Weather',
                 // orderId: randomOrderId,
@@ -111,8 +118,6 @@ class Alert {
 
             this.hubConnection.emit('alert-available', alertInfo);
         }, 2000);
-
-
     }
 }
 
