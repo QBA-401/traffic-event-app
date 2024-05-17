@@ -16,7 +16,6 @@ class Alert {
     // generated from chatgpt
     generateTrafficAlert() {
         // Randomly select type of traffic alert
-        console.log(this.channelURL)
         const alertTypes = ['Accident', 'Road construction', 'Heavy traffic', 'Vehicle breakdown', 'Lane closure', 'Traffic jam'];
         const alertType = alertTypes[Math.floor(Math.random() * alertTypes.length)];
 
@@ -30,9 +29,9 @@ class Alert {
 
         const alertMessageColor = function Colorize(severity) {
             let res = "";
-            const orangeColor = "\x1b[33m", greenColor = "\x1b[32m";
+            const [orangeColor, greenColor,redColor] = ["\x1b[33m", "\x1b[32m","\x1b[31m$"];
             if (severity === "High")
-                res = `${alertType} alert: ${location}. Severity: "\x1b[31m${severity}\x1b[0m".`;
+                res = `${alertType} alert: ${location}. Severity: "${redColor}{severity}\x1b[0m".`;
             else if (severity === "Medium")
                 res = `${alertType} alert: ${location}. Severity: "${orangeColor}${severity}\x1b[0m".`;
             else
