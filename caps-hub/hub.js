@@ -17,7 +17,6 @@ console.log(`Server is running on port ${port}`);
 io.on('connection', (socket) => {
   console.log('Connected', socket.id);
 
-  // event listeners
   socket.on('alert-available', (payload) => {
     handleAlertAvailable(payload);
   });
@@ -29,8 +28,6 @@ io.on('connection', (socket) => {
     }
   });
 
-  // socket.on('in-transit', handleInTransit);
-
   socket.on('received', (payload) => {
     handleReceived(payload);
     if (!queuesObject[payload.alert]) {
@@ -38,16 +35,6 @@ io.on('connection', (socket) => {
     }
     queuesObject[payload.alert].enqueue(payload);
   });
-
-  // socket.on('get-alert-info', (alertSystem) => {
-  //   if (!queuesObject[alertSystem]) {
-  //     queuesObject[alertSystem] = new Queue();
-  //   }
-  //   while (!queuesObject[alertSystem].isEmpty()) {
-  //     const payload = queuesObject[alertSystem].dequeue();
-  //     socket.emit('package-delivered', payload);
-  //   }
-  // });
 
   socket.on('received', (alertSystem) => {
     if (queuesObject[alertSystem] && !queuesObject[alertSystem].isEmpty()) {
