@@ -19,6 +19,7 @@ io.on('connection', (socket) => {
 
   socket.on('alert-available', (payload) => {
     handleAlertAvailable(payload);
+    io.emit('alert-dash', { payload });
   });
 
   socket.on('driver-ready-for-alerts', () => {

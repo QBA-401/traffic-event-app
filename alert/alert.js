@@ -2,7 +2,7 @@
 const getWeather = require('./weather')
 const Chance = require('chance');
 let cityData = "Noginsk"
-
+let severity2 = "";
 class Alert {
     constructor(channelURL) {
         this.io = require('socket.io-client');
@@ -13,6 +13,7 @@ class Alert {
         this.generateTrafficAlert();
         this.generateWeatherReport();
     }
+
 
     generateTrafficAlert() {
         // Randomly select type of traffic alert
@@ -28,16 +29,23 @@ class Alert {
         const randomValue = Math.random();
         const index = Math.floor(randomValue * severityLevels.length);
         const severity = severityLevels[index];
-        
+
         const alertMessageColor = function Colorize(severity) {
+
             let res = "";
             const [orangeColor, greenColor,redColor,blueColor] = ["\x1b[33m","\x1b[32m","\x1b[31m","\e[34m"];
-            if (severity === "High")
+            if (severity === "High") {
+                severity2 = 'high'
                 res = `${alertType} alert: ${location}. Severity: "${redColor}${severity}\x1b[0m".`;
-            else if (severity === "Medium")
+            }
+            else if (severity === "Medium") { severity2 = 'medium'
+
                 res = `${alertType} alert: ${location}. Severity: "${orangeColor}${severity}\x1b[0m".`;
-            else
+            }
+            else {
+                severity2 = 'low'
                 res = `${alertType} alert: ${location}. Severity: "${greenColor}${severity}\x1b[0m".`;
+            }
             return res;
         };
 
@@ -69,9 +77,9 @@ class Alert {
     }
 
 
-    generateRealWeatherReport(cityData) {
-        getWeather(cityData);
-    }
+    // generateRealWeatherReport(cityData) {
+    //     getWeather(cityData);
+    // }
 
     startAlerts() {
         setInterval(() => {
@@ -81,6 +89,7 @@ class Alert {
             this.hubConnection.emit('get-alert-info', alertSystem);
             const alertInfo = {
                 alert: 'Traffic',
+                severity : severity2,
                 alertMessage: randomTrafficAlert
             }
 
@@ -100,6 +109,7 @@ class Alert {
 
             const alertInfo = {
                 alert: 'Weather',
+                severity : severity2,
                 alertMessage: randomWeatherAlert
             }
 
