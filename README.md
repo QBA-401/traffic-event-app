@@ -19,8 +19,7 @@ The Traffic Event Dispatch Service is a system designed to manage traffic events
 ## Driver: Represents end-users who receive alerts and notifications about traffic events.
 - Rely on the system to make informed decisions while driving.
 ### Queue
-- Manages request information with different frequencies.
-- Ensures efficient processing of incoming requests.
+No need for this for our projects.
 
 ### Logs Information
 - Stores and logs information received from various sources, such as agencies or organizations.
@@ -46,4 +45,4 @@ The Traffic Event Dispatch Service is a system designed to manage traffic events
 A UML diagram can visually represent the components and interactions of the Traffic Event Dispatch Service. It includes classes, relationships, and annotations to convey the system's structure and functionality effectively.
 
 
-- UML diagram: ![alt text](UML.png)
+- UML diagram: ![alt text](image.png)
